@@ -1,0 +1,21 @@
+{
+    "enabled": true,
+
+    "allowMobile": true,
+
+    "allowGroup": false,
+
+    "allowBroadcast": false,
+
+    "maxMessageLength": 4000,
+
+    "retry": {
+        "enabled": false,
+        "maxAttempts": 3
+    },
+
+    "logging": {
+        "enabled": true
+    }
+
+}

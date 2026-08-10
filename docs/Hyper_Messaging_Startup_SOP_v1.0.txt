@@ -1,0 +1,84 @@
+Hyper Messaging Platform - Startup SOP v1.0
+
+HMAS (Hyper Messaging Automation System) is a modular, configuration-driven communication platform designed to automate, secure, and orchestrate messaging workflows across multiple applications, services, and communication channels.
+
+
+
+
+
+
+========================================================== PROJECT
+FOLDER ==========================================================
+
+D: │ ├── AMAS_Server ├── School_WhatsApp_Server ├── gateway └── Old code
+
+========================================================== STARTUP
+PROCEDURE ==========================================================
+
+STEP 1 : Open Command Prompt
+
+D: cd
+
+STEP 2 : Start AMAS Server
+
+Open CMD-1
+
+cd D:_Server node server.js
+
+Expected: - WhatsApp Connected - AMAS Server Listening on Port 3001
+
+STEP 3 : Start School WhatsApp Server
+
+Open CMD-2
+
+cd D:_WhatsApp_Server node server.js
+
+Expected: - WhatsApp Connected - School Server Listening on Port 3002
+
+STEP 4 : Start Gateway
+
+Open CMD-3
+
+cd D: node server.js
+
+Expected: - Gateway Listening on Port 3000
+
+STEP 5 : Start ngrok
+
+Open CMD-4
+
+ngrok http 3000
+
+Expected: Forwarding https://xxxxxxxx.ngrok-free.app
+
+Copy this URL and use it in Google Apps Script / PHP if required.
+
+========================================================== TESTING
+==========================================================
+
+1.  POST http://localhost:3000/send/amas
+
+2.  POST http://localhost:3000/send/school
+
+3.  Run Google Apps Script Expected: HTTP 200
+
+4.  Run PHP Expected: WhatsApp Sent Successfully
+
+========================================================== SHUTDOWN
+PROCEDURE ==========================================================
+
+Stop in this order:
+
+1.  ngrok
+2.  Gateway
+3.  School WhatsApp Server
+4.  AMAS Server
+
+========================================================== DAILY HEALTH
+CHECK ==========================================================
+
+[ ] Internet Connected [ ] AMAS Server Running [ ] School Server Running
+[ ] Gateway Running [ ] ngrok Running [ ] Test Message Delivered
+
+========================================================== END OF
+DOCUMENT ==========================================================

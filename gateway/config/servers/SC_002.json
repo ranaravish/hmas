@@ -1,0 +1,40 @@
+{
+    "id": "SC_002",
+
+    "name": "School",
+
+    "description": "School WhatsApp Automation Server",
+
+    "url": "http://localhost:3002/send",
+
+    "apiKey": "SCHOOL_5H8K2P9L7X4M1Q",
+
+    "enabled": true,
+
+    "maintenanceMode": false,
+
+    "rateLimit": {
+        "requests": 50,
+        "windowSeconds": 60
+    },
+
+    "dailyQuota": {
+        "limit": 200
+    },
+
+    "services": {
+        "send": true,
+        "parser": false,
+        "image": false,
+        "pdf": false,
+        "voice": false,
+        "location": false,
+        "scheduler": false,
+        "webhook": false,
+        "aiReply": false
+    },
+
+    "override": {
+    
+}
+}

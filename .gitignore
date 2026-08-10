@@ -1,0 +1,30 @@
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Environment
+.env
+.env.*
+
+# Baileys Authentication
+auth_info/
+auth_info_baileys/
+session/
+sessions/
+
+# Logs
+logs/
+*.log
+
+# OS Files
+Thumbs.db
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary
+*.tmp
+*.bak
+Old code/

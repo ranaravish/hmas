@@ -1,0 +1,32 @@
+{
+    "id": "A001",
+    "name": "AMAS",
+    "description": "AMAS WhatsApp Automation Server",
+    "url": "http://localhost:3001/send",
+    "apiKey": "AMAS_8K4P7X2L9Q5M1R6N",
+    "enabled": true,
+    "maintenanceMode": false,
+    "rateLimit": {
+        "requests": 100,
+        "windowSeconds": 60
+    },
+    "dailyQuota": {
+        "limit": 1000
+    },
+    "services": {
+        "send": true,
+        "parser": true,
+        "image": false,
+        "pdf": false,
+        "voice": false,
+        "location": false,
+        "scheduler": false,
+        "webhook": false,
+        "aiReply": false
+    },
+    "override": {
+        "send": {
+            "allowGroup": true
+        }
+    }
+}
