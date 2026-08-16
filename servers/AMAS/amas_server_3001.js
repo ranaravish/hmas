@@ -1,51 +1,50 @@
 /******************************************************************
  * PROJECT  : AMAS
- * FILE     : server.js
- * VERSION  : 1.1
+ * FILE     : amas_server_3001.js
+ * VERSION  : 1.3
  * AUTHOR   : Rana Ravish + Jarvis
- * PURPOSE  : Universal WhatsApp Gateway
+ * PURPOSE  : AMAS Universal Gateway
  ******************************************************************/
 
-
 const express = require("express");
-
-//const whatsapp = require("./whatsapp");
-//const whatsappRouter = require("./routes/whatsapp");
 
 const {
     startWhatsApp,
     sendGroupMessage,
-    sendToMobile
+    sendToMobile,
+    sendToAmasGroup
 } = require("./whatsapp");
 
-
-
 const app = express();
-
 const PORT = 3001;
+
+
+/******************************************************************
+ * JSON Body Parser
+ ******************************************************************/
 
 app.use(express.json());
 
-//app.use("/send", whatsappRouter);
 
 /******************************************************************
  * HOME
  ******************************************************************/
-app.get("/", (req, res) => {
 
+app.get("/", (req, res) =>
+{
     res.send("AMAS Universal Gateway Running...");
-
 });
+
 
 /******************************************************************
  * SEND WHATSAPP
  ******************************************************************/
 
-app.post("/send", async (req, res) => {
-
-    try {
-
-        const payload = req.body;
+app.post("/send", async (req, res) =>
+{
+    try
+    {
+        const payload = req.body || {};
 
         console.log("\n======================================");
         console.log("NEW REQUEST RECEIVED");
@@ -56,110 +55,110 @@ app.post("/send", async (req, res) => {
         const groupId = payload.groupId || "";
         const mobile = payload.mobile || "";
         const message = payload.data?.message;
+        const replyToMessageId =
+            payload.replyToMessageId ||
+            payload.data?.replyToMessageId ||
+            "";
 
-        if (!message) {
-
+        if (!message)
+        {
             return res.status(400).json({
-
                 success: false,
-
+                code: "MESSAGE_MISSING",
                 error: "Message Missing"
-
             });
-
         }
 
-        /******************************************************
-         * SEND TO GROUP
-         ******************************************************/
-        if (groupId !== "") {
+        //--------------------------------------------------
+        // GROUP
+        //--------------------------------------------------
 
-            await sendGroupMessage(
-
+        if (groupId !== "")
+        {
+            const sentMessage = await sendGroupMessage(
                 groupId,
-
-                message
-
+                message,
+                replyToMessageId
             );
 
             return res.json({
-
                 success: true,
-
                 mode: "GROUP",
-
                 destination: groupId,
-
+                messageId: sentMessage?.key?.id || "-",
                 message: "WhatsApp Group Message Sent"
-
             });
-
         }
 
-        /******************************************************
-         * SEND TO MOBILE
-         ******************************************************/
-        if (mobile !== "") {
+        //--------------------------------------------------
+        // INDIVIDUAL
+        //--------------------------------------------------
 
-            await sendToMobile(
-
+        if (mobile !== "")
+        {
+            const sentMessage = await sendToMobile(
                 mobile,
-
-                message
-
+                message,
+                replyToMessageId
             );
 
             return res.json({
-
                 success: true,
-
                 mode: "INDIVIDUAL",
-
                 destination: mobile,
-
-                message: "WhatsApp Sent"
-
+                messageId: sentMessage?.key?.id || "-",
+                message: "WhatsApp Message Sent"
             });
-
         }
 
-        /******************************************************
-         * INVALID REQUEST
-         ******************************************************/
-        return res.status(400).json({
 
-            success: false,
+        //--------------------------------------------------
+        // DEFAULT AMAS GROUP
+        //--------------------------------------------------
 
-            error: "Either 'mobile' or 'groupId' is required."
+        const sentMessage = await sendToAmasGroup(
+            message,
+            replyToMessageId
+        );
 
+        return res.json({
+            success: true,
+            mode: "AMAS_GROUP",
+            messageId: sentMessage?.key?.id || "-",
+            message: "AMAS Group Message Sent"
         });
-
     }
+    catch (err)
+    {
+        console.error("\n❌ SEND ERROR :", err);
 
-    catch (err) {
-
-        console.error(err);
-
-        res.status(500).json({
-
+        return res.status(500).json({
             success: false,
-
+            code: "SEND_FAILED",
             error: err.message
-
         });
-
     }
-
 });
+
 
 /******************************************************************
  * START SERVER
  ******************************************************************/
-app.listen(PORT, async () => {
 
-    console.log(`🚀 AMAS Universal Gateway Started`);
+app.listen(PORT, async () =>
+{
+    console.log("🚀 AMAS Universal Gateway Started");
     console.log(`🌐 http://localhost:${PORT}\n`);
 
-  await startWhatsApp();
-
+    try
+    {
+        await startWhatsApp();
+    }
+    catch (err)
+    {
+        console.error(
+            "❌ WhatsApp Start Failed :",
+            err.message
+        );
+    }
 });

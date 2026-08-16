@@ -1,6 +1,6 @@
 /******************************************************************
- * PROJECT  : AMAS
- * FILE     : server.js
+ * PROJECT  : HMAS
+ * FILE     : school_server_3002.js
  * VERSION  : 1.1
  * AUTHOR   : Rana Ravish + Jarvis
  * PURPOSE  : School_ WhatsApp Gateway
@@ -66,23 +66,20 @@ app.post("/send", async (req, res) => {
          ******************************************************/
         if (group !== "") {
 
-            await sendGroupMessage(
+           const result=  await sendGroupMessage(
 
                 group,
-
-                message
-
+                message,
+                payload.data?.attachment || null
             );
 
             return res.json({
 
                 success: true,
-
                 mode: "GROUP",
-
                 destination: group,
-
-                message: "WhatsApp Group Message Sent"
+                message: "WhatsApp Group Message Sent",
+                messageId: result?.key?.id || null
 
             });
 
@@ -93,27 +90,23 @@ app.post("/send", async (req, res) => {
          ******************************************************/
         if (mobile !== "") {
 
-            await sendToMobile(
-
-                mobile,
-
-                message,
-
-                payload.data?.attachment || null
-
+            const result = await sendToMobile(
+    mobile,
+    message,
+    payload.data?.attachment || null
 );
 
-            return res.json({
+//console.log("\n========== BAILEYS Return id ==========");
+//console.dir(result, { depth: null });
+//console.log("====================================\n");
 
-                success: true,
-
-                mode: "INDIVIDUAL",
-
-                destination: mobile,
-
-                message: "WhatsApp Sent"
-
-            });
+return res.json({
+    success: true,
+    mode: "INDIVIDUAL",
+    destination: mobile,
+    message: "WhatsApp Sent",
+    messageId: result?.key?.id || null
+});
 
         }
 

@@ -17,13 +17,13 @@ PROCEDURE ==========================================================
 
 STEP 1 : Open Command Prompt
 
-D: cd
 
 STEP 2 : Start AMAS Server
 
 Open CMD-1
 
-cd D:_Server node server.js
+node D:\Projects\hmas\servers\school\school_3002
+
 
 Expected: - WhatsApp Connected - AMAS Server Listening on Port 3001
 
@@ -39,7 +39,7 @@ STEP 4 : Start Gateway
 
 Open CMD-3
 
-cd D: node server.js
+node D:\Projects\hmas\gateway\gateway.js
 
 Expected: - Gateway Listening on Port 3000
 
@@ -52,6 +52,18 @@ ngrok http 3000
 Expected: Forwarding https://xxxxxxxx.ngrok-free.app
 
 Copy this URL and use it in Google Apps Script / PHP if required.
+
+Open CMD-5
+
+cloudflared tunnel run hmas-test 
+
+in PowerShell
+
+
+
+
+
+
 
 ========================================================== TESTING
 ==========================================================
